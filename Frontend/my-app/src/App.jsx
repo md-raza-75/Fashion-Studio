@@ -1,0 +1,27 @@
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import FashionCollection from './components/FashionCollection.jsx';
+import LoginPage from "./components/LoginPage";
+import Signup from "./components/Signup";
+import Product from './components/Product.jsx';
+import Product2 from './components/Product2.jsx'; // Import Product2 component
+import Product3 from './components/Product3.jsx'; 
+import ProfilePage from "./components/ProfilePage.jsx";
+
+function App() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<FashionCollection />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/" element={<Product />} />
+        <Route path="/product2" element={<Product2 />} />
+        <Route path="/product3" element={<Product3 />} />
+        <Route path="/profile" element={<ProfilePage />} />
+      </Routes>
+    </Router>
+  );
+}
+
+export default App;

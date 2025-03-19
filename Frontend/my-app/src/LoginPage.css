@@ -1,0 +1,103 @@
+body, html {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+.login-container {
+  height: 100vh;
+  background-color: #D98B9A;
+  display: flex;
+  flex-direction: column;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #FF69B4; /* Vibrant pink for better visibility */
+  padding: 15px 40px; /* Increased padding for better spacing */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px; /* Added spacing below navbar */
+}
+
+.navbar a {
+  color: #fff;
+  margin: 0 20px;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.navbar .back-button {
+  cursor: pointer;
+  font-size: 22px;
+  color: #fff;
+}
+
+.login-content {
+  display: flex;
+  flex-grow: 1;
+  align-items: center;
+  justify-content: center; /* Centered content for better alignment */
+  padding: 40px;
+}
+
+.login-form {
+  width: 50%;
+  padding: 40px;
+  background-color: #F7D1D5;
+  border-radius: 20px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
+
+.login-form h1 {
+  font-size: 2rem;
+  margin-bottom: 5px;
+  text-align: center;
+}
+
+.login-form p {
+  color: #666;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+input[type="email"], input[type="password"] {
+  width: 100%;
+  padding: 12px;
+  margin: 8px 0;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 10px 0;
+}
+
+.sign-in {
+  background-color: #F35050;
+  color: #fff;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 100%;
+}
+
+.signup span {
+  color: #F35050;
+  cursor: pointer;
+}
+
+.login-image img {
+  width: 100%;
+  max-width: 400px;
+  border-radius: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
