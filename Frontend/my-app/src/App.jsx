@@ -7,6 +7,8 @@ import Product from './components/Product.jsx';
 import Product2 from './components/Product2.jsx'; // Import Product2 component
 import Product3 from './components/Product3.jsx'; 
 import ProfilePage from "./components/ProfilePage.jsx";
+import Payment from "./components/Payment.jsx";
+import Settings from "./components/Settings.jsx";
 
 function App() {
   return (
@@ -15,10 +17,12 @@ function App() {
         <Route path="/" element={<FashionCollection />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<Signup />} />
-        <Route path="/" element={<Product />} />
+        <Route path="/product" element={<Product />} />
         <Route path="/product2" element={<Product2 />} />
         <Route path="/product3" element={<Product3 />} />
         <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/CheckOut" element={<Payment/>} />
+        <Route path="/settings" element={<Settings />} />
       </Routes>
     </Router>
   );

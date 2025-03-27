@@ -1,0 +1,134 @@
+/* Admin Dashboard Styles */
+body {
+    font-family: Arial, sans-serif;
+  }
+  
+  .container {
+    display: flex;
+    height: 100vh;
+    background-color: #C97B8C;
+  }
+  
+  /* Sidebar */
+  .sidebar {
+    width: 20%;
+    background-color: white;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .sidebar h1 {
+    color: #1E40AF;
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
+  .sidebar nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+  }
+  
+  .sidebar nav ul li {
+    padding: 10px 0;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  .sidebar nav ul li:first-child {
+    font-weight: bold;
+    color: #1E40AF;
+  }
+  
+  .sidebar .help {
+    margin-top: auto;
+    padding-top: 20px;
+  }
+  
+  /* Main Content */
+  .main-content {
+    width: 80%;
+    padding: 20px;
+  }
+  
+  .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .navbar input {
+    width: 50%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .nav-icons {
+    display: flex;
+    gap: 15px;
+  }
+  
+  .nav-icons span {
+    padding: 10px;
+    background-color: #e5e5e5;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+  
+  /* Sales Information */
+  .sales-info {
+    margin-top: 20px;
+  }
+  
+  .sales-info h2 {
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
+  .filters {
+    display: flex;
+    gap: 10px;
+    margin: 15px 0;
+  }
+  
+  .filters input {
+    width: 25%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  /* Table */
+  .table-container {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .table-container table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .table-container th, .table-container td {
+    padding: 10px;
+    border-top: 1px solid #ddd;
+  }
+  
+  .table-container th {
+    text-align: left;
+  }
+  
+  .table-container td .invoice-link {
+    color: #1E40AF;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  
+  .table-container input[type='checkbox'] {
+    cursor: pointer;
+  }
+  

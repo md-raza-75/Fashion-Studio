@@ -33,7 +33,7 @@ const ProfilePage = () => {
                 <div className="navbar-links">
                     <a href="#">Home</a>
                     <a href="/">Products</a>
-                    <a href="#">Settings</a>
+                    <a href="Settings">Settings</a>
                     <button className="btn logout-btn" onClick={handleLogout}>Logout</button>
                 </div>
             </nav>

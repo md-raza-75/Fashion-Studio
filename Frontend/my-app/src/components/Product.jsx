@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import '../Product.css';  // Make sure the path is correct
+import '../Product.css';
+import { useNavigate } from 'react-router-dom';
 
 const Navbar = () => (
   <div className="navbar">
@@ -13,17 +14,14 @@ const Navbar = () => (
 );
 
 const ProductPage = () => {
+  const navigate = useNavigate();
   const [cartVisible, setCartVisible] = useState(false);
-  const [quantity, setQuantity] = useState(1); // Track quantity state
-  const [selectedSize, setSelectedSize] = useState('M'); // Track selected size
-  const [selectedColor, setSelectedColor] = useState('black'); // Track selected color
+  const [quantity, setQuantity] = useState(1);
+  const [selectedSize, setSelectedSize] = useState('M');
+  const [selectedColor, setSelectedColor] = useState('black');
 
   const handleQuantityChange = (operation) => {
-    if (operation === 'increment') {
-      setQuantity(quantity + 1);
-    } else if (operation === 'decrement' && quantity > 1) {
-      setQuantity(quantity - 1);
-    }
+    setQuantity(operation === 'increment' ? quantity + 1 : Math.max(1, quantity - 1));
   };
 
   const handleSizeSelect = (size) => setSelectedSize(size);
@@ -47,35 +45,25 @@ const ProductPage = () => {
             <span className="discount">SAVE 30%</span>
           </p>
 
-          <div className="viewers">24 people are viewing this right now</div>
-          <div className="sale-timer">Hurry up! Sale ends in: 00 : 05 : 59 : 47</div>
-          <p className="stock-info">Only 9 item(s) left in stock!</p>
-
           <div className="size-options">
             <label>Size:</label>
             <div className="sizes">
-              <button onClick={() => handleSizeSelect('M')}>M</button>
-              <button onClick={() => handleSizeSelect('L')}>L</button>
-              <button onClick={() => handleSizeSelect('XL')}>XL</button>
-              <button onClick={() => handleSizeSelect('XXL')}>XXL</button>
+              {['M', 'L', 'XL', 'XXL'].map(size => (
+                <button key={size} onClick={() => handleSizeSelect(size)}>{size}</button>
+              ))}
             </div>
           </div>
 
           <div className="color-options">
             <label>Color:</label>
             <div className="colors">
-              <div
-                className={`color blue ${selectedColor === 'blue' ? 'selected' : ''}`}
-                onClick={() => handleColorSelect('blue')}
-              ></div>
-              <div
-                className={`color black ${selectedColor === 'black' ? 'selected' : ''}`}
-                onClick={() => handleColorSelect('black')}
-              ></div>
-              <div
-                className={`color pink ${selectedColor === 'pink' ? 'selected' : ''}`}
-                onClick={() => handleColorSelect('pink')}
-              ></div>
+              {['blue', 'black', 'pink'].map(color => (
+                <div
+                  key={color}
+                  className={`color ${color} ${selectedColor === color ? 'selected' : ''}`}
+                  onClick={() => handleColorSelect(color)}
+                ></div>
+              ))}
             </div>
           </div>
 
@@ -115,7 +103,7 @@ const ProductPage = () => {
               </div>
               <p className="subtotal">Subtotal: ₹{1250 * quantity}</p>
               <div className="checkout-buttons">
-                <button className="checkout-btn">Checkout</button>
+                <button className="checkout-btn" onClick={() => navigate('/CheckOut')}>CheckOut</button>
               </div>
               <button className="view-cart">View Cart</button>
             </div>
@@ -150,7 +138,7 @@ const Footer = () => (
 );
 
 const App = () => (
-  <div>
+  <div className="app-container">
     <Navbar />
     <ProductPage />
     <Footer />
