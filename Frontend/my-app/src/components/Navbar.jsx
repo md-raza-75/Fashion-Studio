@@ -66,11 +66,26 @@ export default function Navbar() {
               border: "none",
               borderRadius: "20px",
               padding: "8px 16px",
-              cursor: "pointer"
+              cursor: "pointer",
+              marginRight: "10px"
             }}
             onClick={() => navigate('/profile')}
           >
             Profile
+          </button>
+
+          <button
+            style={{
+              backgroundColor: "#2196F3",
+              color: "#fff",
+              border: "none",
+              borderRadius: "20px",
+              padding: "8px 16px",
+              cursor: "pointer"
+            }}
+            onClick={() => navigate('/admin')}
+          >
+            Admin
           </button>
         </div>
       </header>
@@ -81,3 +96,4 @@ export default function Navbar() {
     </>
   );
 }
+ 

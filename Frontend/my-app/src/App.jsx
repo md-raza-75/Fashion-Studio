@@ -9,7 +9,9 @@ import Product3 from './components/Product3.jsx';
 import ProfilePage from "./components/ProfilePage.jsx";
 import Payment from "./components/Payment.jsx";
 import Settings from "./components/Settings.jsx";
-
+import Admin from "./Admin/Admin.jsx";
+import ForgotPassword from "./components/ForgotPassword.jsx";
+import OrderHistory from "./components/OrderHistory.jsx";
 function App() {
   return (
     <Router>
@@ -23,6 +25,9 @@ function App() {
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/CheckOut" element={<Payment/>} />
         <Route path="/settings" element={<Settings />} />
+        <Route path="/Admin" element={<Admin />} />
+        <Route path="/ForgotPassword" element={<ForgotPassword />} />
+        <Route path="/Order" element={<OrderHistory />} />
       </Routes>
     </Router>
   );
