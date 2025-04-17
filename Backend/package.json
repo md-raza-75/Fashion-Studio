@@ -1,0 +1,26 @@
+{
+  "name": "fashion-studio-backend",
+  "version": "1.0.0",
+  "description": "Fashion studio backend",
+  "main": "src/server.js",
+  "scripts": {
+    "dev": "nodemon my-app-backend/src/server.js",
+    "start": "node my-app-backend/src/server.js",
+    "create-db": "node my-app-backend/scripts/create-db.js",
+    "init-db": "node my-app-backend/scripts/init-db.js",
+    "init-images": "node my-app-backend/scripts/init-images.js",
+    "setup": "npm run create-db && npm run init-db && npm run init-images"
+  },
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.10.9",
+    "multer": "^1.4.2",
+    "nodemon": "^3.1.9",
+    "pg": "^8.14.1"
+  }
+}

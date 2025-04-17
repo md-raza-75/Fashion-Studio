@@ -1,45 +1,107 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
-import longKurtis from "../data/longkurtis";
-import shortKurtis from "../data/shortKurtis";
-import sarees from "../data/sarees";
+import axios from "axios";
 
 export default function FashionCollection() {
   const navigate = useNavigate();
+  const [products, setProducts] = useState({
+    "Long Kurti": [],
+    "Short Kurti": [],
+    "Saree": [],
+    "Gown": [],
+    "Jewellery": []
+  });
 
-  const handleAddToCart = (item, route) => {
-    console.log(`${item.name} added to cart`);
-    navigate(route);
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  const fetchProducts = async () => {
+    try {
+      const response = await axios.get("http://localhost:3000/api/products");
+      
+      // Organize products by category
+      const categorizedProducts = response.data.reduce((acc, product) => {
+        // Ensure all category keys exist
+        if (!acc[product.category]) {
+          acc[product.category] = [];
+        }
+        acc[product.category].push(product);
+        return acc;
+      }, {
+        "Long Kurti": [],
+        "Short Kurti": [],
+        "Saree": [],
+        "Gown": [],
+        "Jewellery": []
+      });
+      
+      setProducts(categorizedProducts);
+      console.log("Fetched products:", response.data);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    }
   };
 
-  const renderProducts = (title, data, route) => (
-    <section className="py-12">
+  const handleAddToCart = (item) => {
+    console.log(`${item.name} added to cart`);
+    // Store the selected item in localStorage or context if needed
+    localStorage.setItem('selectedProduct', JSON.stringify(item));
+    // Navigate to the products page
+    navigate('/products');
+  };
+
+  const renderProducts = (title, data) => (
+    <section className="py-12" key={title}>
       <div className="container mx-auto px-6">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-3xl font-bold text-gray-800">{title}</h2>
           <a href="#" className="text-pink-600 hover:underline">See all</a>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {data.map((item) => (
-            <div key={item.id} className="bg-white shadow-lg rounded-lg overflow-hidden transform hover:scale-105 transition duration-300">
-              <img className="w-full h-64 object-cover" src={item.img} alt={item.name} />
-              <div className="p-4 text-center">
-                <h3 className="text-lg font-semibold text-gray-700">{item.name}</h3>
-                <p className="text-gray-600">₹ {item.price}.00</p>
-                <button 
-                  className="mt-4 bg-pink-600 text-white py-2 px-6 rounded-full hover:bg-pink-700 transition"
-                  onClick={() => handleAddToCart(item, route)}
-                >
-                  Add to Cart
-                </button>
+        {data.length === 0 ? (
+          <p className="text-center text-gray-500">No products available in this category</p>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {data.map((item) => (
+              <div key={item.id} className="bg-white shadow-lg rounded-lg overflow-hidden transform hover:scale-105 transition duration-300">
+                <img 
+                  className="w-full h-64 object-cover" 
+                  src={item.img.startsWith('http') ? item.img : `/images/${item.img}`} 
+                  alt={item.name}
+                  onError={(e) => {
+                    console.error("Image failed to load:", item.img);
+                    e.target.src = '/images/default-product.jpg'; // Fallback image
+                  }}
+                />
+                <div className="p-4 text-center">
+                  <h3 className="text-lg font-semibold text-gray-700">{item.name}</h3>
+                  <p className="text-gray-600">₹ {item.price}</p>
+                  <button 
+                    className="mt-4 bg-pink-600 text-white py-2 px-6 rounded-full hover:bg-pink-700 transition"
+                    onClick={() => handleAddToCart(item)}
+                  >
+                    Add to Cart
+                  </button>
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );
+
+  const getCategoryImage = (category) => {
+    const categoryImages = {
+      "Long Kurti": "p1.jpg",
+      "Short Kurti": "k2.jpg",
+      "Saree": "s1.jpg",
+      "Gown": "k3.jpg",
+      "Jewellery": "s8.jpg"
+    };
+    return `/images/${categoryImages[category] || 'default-category.jpg'}`;
+  };
 
   return (
     <div className="bg-gray-100 min-h-screen">
@@ -52,7 +114,15 @@ export default function FashionCollection() {
         <button className="mt-4 bg-white text-pink-600 py-3 px-8 rounded-full font-semibold shadow-md hover:bg-gray-200 transition">SHOP NOW</button>
         <div className="flex justify-center mt-8 gap-4">
           {["model1.jpg", "model2.jpg", "model3.jpg"].map((img, i) => (
-            <img key={i} className="w-40 h-40 object-cover rounded-lg shadow-lg" src={`/images/${img}`} alt={`Model ${i + 1}`} />
+            <img 
+              key={i} 
+              className="w-40 h-40 object-cover rounded-lg shadow-lg" 
+              src={`/images/${img}`} 
+              alt={`Model ${i + 1}`}
+              onError={(e) => {
+                e.target.src = '/images/default-model.jpg';
+              }}
+            />
           ))}
         </div>
       </section>
@@ -60,23 +130,26 @@ export default function FashionCollection() {
       {/* Categories */}
       <section className="py-12 px-6">
         <div className="flex flex-wrap justify-center gap-6">
-          {[{ img: "/images/p1.jpg", label: "Long Kurti" },
-            { img: "/images/k2.jpg", label: "Short Kurti" },
-            { img: "/images/s1.jpg", label: "Saree" },
-            { img: "/images/k3.jpg", label: "Gown" },
-            { img: "/images/s8.jpg", label: "Jewellery" }].map((item, index) => (
-            <div key={index} className="text-center bg-white shadow-lg p-4 rounded-lg w-40 hover:shadow-2xl transition">
-              <img className="w-32 h-32 object-cover rounded-md mx-auto" src={item.img} alt={item.label} />
-              <span className="block mt-2 font-semibold text-gray-700">{item.label}</span>
+          {Object.keys(products).map((category) => (
+            <div key={category} className="text-center bg-white shadow-lg p-4 rounded-lg w-40 hover:shadow-2xl transition">
+              <img 
+                className="w-32 h-32 object-cover rounded-md mx-auto" 
+                src={getCategoryImage(category)} 
+                alt={category}
+                onError={(e) => {
+                  e.target.src = '/images/default-category.jpg';
+                }}
+              />
+              <span className="block mt-2 font-semibold text-gray-700">{category}</span>
             </div>
           ))}
         </div>
       </section>
 
       {/* Product Collections */}
-      {renderProducts("Long Kurti Collection", longKurtis, "/product")}
-      {renderProducts("Short Kurti Collection", shortKurtis, "/product3")}
-      {renderProducts("Saree Collection", sarees, "/product2")}
+      {Object.entries(products).map(([category, items]) => (
+        renderProducts(`${category} Collection`, items)
+      ))}
 
       {/* About Section */}
       <section className="bg-pink-100 py-16 text-center rounded-xl mx-6 shadow-xl my-12">
