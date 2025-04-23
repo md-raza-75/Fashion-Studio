@@ -1,83 +1,87 @@
 const pool = require('../config/db');
 
-// Create product
-async function createProduct(name, category, price, img, description, stock) {
+// Create payment
+async function createPayment(paymentData) {
   try {
+    const { 
+      user_name, 
+      email,
+      phone, 
+      address, 
+      city, 
+      state, 
+      pincode, 
+      payment_method, 
+      amount
+    } = paymentData;
+    
     const query = `
-      INSERT INTO products (name, category, price, img, description, stock)
-      VALUES ($1, $2, $3, $4, $5, $6)
+      INSERT INTO payments (user_name, email, phone, address, city, state, pincode, payment_method, amount)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
       RETURNING *;
     `;
-    const values = [name, category, price, img, description, stock];
+    
+    const values = [
+      user_name,
+      email,
+      phone,
+      address,
+      city,
+      state,
+      pincode,
+      payment_method,
+      amount
+    ];
+    
     const result = await pool.query(query, values);
     return result.rows[0];
   } catch (error) {
-    console.error('Error creating product:', error);
+    console.error('Error creating payment:', error);
     throw error;
   }
 }
 
-// Get all products
-async function getAllProducts() {
+// Get all payments
+async function getAllPayments() {
   try {
-    const query = 'SELECT * FROM products;';
+    const query = 'SELECT * FROM payments ORDER BY created_at DESC;';
     const result = await pool.query(query);
     return result.rows;
   } catch (error) {
-    console.error('Error getting all products:', error);
+    console.error('Error getting payments:', error);
     throw error;
   }
 }
 
-// Get products by category
-async function getProductsByCategory(category) {
+// Get payment by ID
+async function getPaymentById(id) {
   try {
-    const query = 'SELECT * FROM products WHERE category = $1;';
-    const values = [category];
-    const result = await pool.query(query, values);
-    return result.rows;
-  } catch (error) {
-    console.error('Error getting products by category:', error);
-    throw error;
-  }
-}
-
-// Update product
-async function updateProduct(id, data) {
-  try {
-    const { name, category, price, img, description, stock } = data;
-    const query = `
-      UPDATE products
-      SET name = $1, category = $2, price = $3, img = $4, description = $5, stock = $6
-      WHERE id = $7
-      RETURNING *;
-    `;
-    const values = [name, category, price, img, description, stock, id];
-    const result = await pool.query(query, values);
-    return result.rows[0];
-  } catch (error) {
-    console.error('Error updating product:', error);
-    throw error;
-  }
-}
-
-// Delete product
-async function deleteProduct(id) {
-  try {
-    const query = 'DELETE FROM products WHERE id = $1 RETURNING *;';
+    const query = 'SELECT * FROM payments WHERE id = $1;';
     const values = [id];
     const result = await pool.query(query, values);
     return result.rows[0];
   } catch (error) {
-    console.error('Error deleting product:', error);
+    console.error('Error getting payment by ID:', error);
+    throw error;
+  }
+}
+
+// Get payments by user email
+async function getPaymentsByEmail(email) {
+  try {
+    const query = 'SELECT * FROM payments WHERE email = $1 ORDER BY created_at DESC;';
+    const values = [email];
+    const result = await pool.query(query, values);
+    return result.rows;
+  } catch (error) {
+    console.error('Error getting payments by email:', error);
     throw error;
   }
 }
 
 module.exports = {
-  createProduct,
-  getAllProducts,
-  getProductsByCategory,
-  updateProduct,
-  deleteProduct
-};
+  createPayment,
+  getAllPayments,
+  getPaymentById,
+  getPaymentsByEmail
+}; 
