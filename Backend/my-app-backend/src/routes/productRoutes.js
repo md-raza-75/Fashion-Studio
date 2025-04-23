@@ -1,14 +1,15 @@
 const express = require('express');
 const router = express.Router();
-const paymentController = require('../controllers/paymentController');
+const productController = require('../controllers/productController');
 const authMiddleware = require('../middleware/authMiddleware');
 
 // Public routes
-router.post('/', paymentController.createPayment);
+router.get('/', productController.getAllProducts);
+router.get('/category/:category', productController.getProductsByCategory);
 
-// Admin routes (protected)
-router.get('/', authMiddleware, paymentController.getAllPayments);
-router.get('/:id', authMiddleware, paymentController.getPaymentById);
-router.get('/user/:email', authMiddleware, paymentController.getPaymentsByEmail);
+// Protected routes (admin only)
+router.post('/', authMiddleware, productController.createProduct);
+router.put('/:id', authMiddleware, productController.updateProduct);
+router.delete('/:id', authMiddleware, productController.deleteProduct);
 
-module.exports = router; 
+module.exports = router;
