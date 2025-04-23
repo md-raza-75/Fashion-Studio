@@ -1,147 +1,82 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
-export default function SignupPage() {
+export default function LoginPage() {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-    agree: false,
-  });
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }));
-  };
-
-  const handleSubmit = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-
-    // Email format validation using regex
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(formData.email)) {
-      alert("Please enter a valid email address.");
-      return;
-    }
-
-    // Passwords must match
-    if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match!");
-      return;
-    }
-
-    // User must agree to the terms
-    if (!formData.agree) {
-      alert("You must agree to the terms and conditions.");
-      return;
-    }
-
     try {
-      const response = await axios.post("http://localhost:3000/api/auth/signup", {
-        name: formData.name,
-        email: formData.email,
-        password: formData.password,
+      const response = await axios.post("http://localhost:3000/api/auth/login", {
+        email,
+        password,
       });
 
-      console.log("Signup successful:", response.data);
-      alert("Signup successful! Please login.");
+      console.log("Login successful:", response.data);
 
-      // Store the name and login status in localStorage
-      localStorage.setItem("username", formData.name);
+      // Store the JWT token in localStorage
+      localStorage.setItem("authToken", response.data.token); // Store the token
       localStorage.setItem("isLoggedIn", "true");
+      localStorage.setItem("username", response.data.name || "User"); // fallback if name is not returned
 
-      // Navigate to login after signup
-      navigate("/login");
+      // Navigate to homepage or the page the user was trying to access
+      navigate("/", { replace: true });
     } catch (error) {
-      console.error("Signup failed:", error);
-      if (error.response) {
-        const errorMessage = error.response.data.message || "Signup failed. Try again later.";
-        alert(errorMessage);
-      } else {
-        alert("Signup failed. Please try again.");
-      }
+      alert("Login failed. Please check your credentials.");
+      console.error("Login error:", error);
     }
   };
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      <div className="flex justify-center items-center min-h-screen pt-16 px-6">
-        <div className="bg-white p-8 shadow-lg rounded-lg w-full max-w-md">
-          <h1 className="text-2xl font-bold text-gray-800 text-center">Sign Up</h1>
-          <p className="text-gray-600 text-center mb-4">Create your account to explore our fashion collection.</p>
+    <div className="h-screen flex flex-col bg-pink-200">
+      <div className="flex flex-grow items-center justify-center px-6">
+        <div className="w-full max-w-2xl bg-white p-8 rounded-lg shadow-lg">
+          <h1 className="text-2xl font-bold text-center">WELCOME BACK</h1>
+          <p className="text-center text-gray-600">Welcome back! Please enter your details.</p>
 
-          <form className="space-y-4" onSubmit={handleSubmit}>
-            <input
-              type="text"
-              name="name"
-              placeholder="Full Name"
-              required
-              className="w-full p-3 border rounded-lg"
-              value={formData.name}
-              onChange={handleChange}
-            />
+          <form onSubmit={handleLogin}>
+            <label className="block mt-4 text-gray-700">Email</label>
             <input
               type="email"
-              name="email"
-              placeholder="Email Address"
+              placeholder="Enter your email"
+              className="w-full p-2 border border-gray-300 rounded-md"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full p-3 border rounded-lg"
-              value={formData.email}
-              onChange={handleChange}
-            />
-            <input
-              type="password"
-              name="password"
-              placeholder="Password"
-              required
-              className="w-full p-3 border rounded-lg"
-              value={formData.password}
-              onChange={handleChange}
-            />
-            <input
-              type="password"
-              name="confirmPassword"
-              placeholder="Confirm Password"
-              required
-              className="w-full p-3 border rounded-lg"
-              value={formData.confirmPassword}
-              onChange={handleChange}
             />
 
-            <div className="flex items-center space-x-2">
-              <input
-                type="checkbox"
-                name="agree"
-                className="w-4 h-4"
-                checked={formData.agree}
-                onChange={handleChange}
-              />
-              <label className="text-gray-600">I agree to the terms and conditions</label>
+            <label className="block mt-4 text-gray-700">Password</label>
+            <input
+              type="password"
+              placeholder="********"
+              className="w-full p-2 border border-gray-300 rounded-md"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+
+            <div className="flex justify-between items-center mt-4">
+              <div className="flex items-center">
+                <input type="checkbox" id="remember" className="mr-2" />
+                <label htmlFor="remember" className="text-gray-700">Remember me</label>
+              </div>
+              <Link to="/ForgotPassword" className="text-pink-600 hover:underline">Forgot password?</Link>
             </div>
 
             <button
               type="submit"
-              className="w-full bg-pink-500 text-white p-3 rounded-lg font-semibold hover:bg-pink-600 transition"
+              className="w-full mt-6 bg-red-500 text-white py-2 rounded-md hover:bg-red-600 transition"
             >
-              Sign Up
+              Sign in
             </button>
           </form>
 
-          <div className="text-center mt-4">
-            Already have an account?{" "}
-            <span
-              className="text-pink-500 cursor-pointer"
-              onClick={() => navigate("/login")}
-            >
-              Login
-            </span>
-          </div>
+          <p className="text-center mt-4 text-gray-700">
+            Don't have an account? <Link to="/signup" className="text-red-500 hover:underline">Sign up for free!</Link>
+          </p>
         </div>
       </div>
     </div>
